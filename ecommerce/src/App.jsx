@@ -3,6 +3,8 @@ import AdminPanel from './components/Admin/AdminPanel'
 import RegisterPanel from './components/Admin/RegisterPanel'
 import './App.css'
 import HomePage from './components/Home/Home'
+import Products from './components/Products/Products'
+import SurveyForm from './components/Survey/SurveyForm'
 
 
 const App = () => {
@@ -10,9 +12,10 @@ const App = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/products" element={<HomePage />} />
+        <Route path="/products" element={<Products />} />
         <Route path="/register" element={<RegisterPanel />} />
         <Route path="/admin/login" element={<AdminPanel />} />
+        <Route path="/survey" element={<SurveyForm />} />
       </Routes>
     </BrowserRouter>
   )

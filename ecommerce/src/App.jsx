@@ -5,11 +5,14 @@ import './App.css'
 import HomePage from './components/Home/Home'
 import Products from './components/Products/Products'
 import SurveyForm from './components/Survey/SurveyForm'
+import store from '../store/store'
+import { Provider } from 'react-redux'
 
 
 const App = () => {
   return (
     <BrowserRouter>
+    <Provider store={store}>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/products" element={<Products />} />
@@ -17,6 +20,7 @@ const App = () => {
         <Route path="/admin/login" element={<AdminPanel />} />
         <Route path="/survey" element={<SurveyForm />} />
       </Routes>
+    </Provider>
     </BrowserRouter>
   )
 }

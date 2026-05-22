@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 
 type AdminUser = {
   name: string
@@ -15,6 +16,7 @@ const RegisterPanel: React.FC = () => {
   const [error, setError] = React.useState('')
   const [message, setMessage] = React.useState('')
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const handleRegister = (event: React.FormEvent) => {
     event.preventDefault()
@@ -41,6 +43,7 @@ const RegisterPanel: React.FC = () => {
 
     const newUsers = [...users, { name, email, password }]
     localStorage.setItem('ecom_admin_users', JSON.stringify(newUsers))
+    dispatch({ type: 'ADMIN_REGISTER', payload:  newUsers })
     setMessage('Account created successfully. Redirecting to login...')
 
     window.setTimeout(() => {

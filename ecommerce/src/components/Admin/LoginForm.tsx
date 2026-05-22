@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { useSelector , useDispatch } from 'react-redux'
 
 type AdminUser = {
   name: string
@@ -13,13 +14,14 @@ const LoginForm: React.FC = () => {
   const [message, setMessage] = React.useState('')
   const [error, setError] = React.useState('')
   const navigate = useNavigate()
+  const users = useSelector((state: any) => state.adminUsers) as AdminUser[]
+  const dispatch = useDispatch()
 
   const handleLogin = (event: React.FormEvent) => {
     event.preventDefault()
     setError('')
     setMessage('')
 
-    const users = JSON.parse(localStorage.getItem('ecom_admin_users') ?? '[]') as AdminUser[]
     const foundUser = users.find((user) => user.email === email && user.password === password)
 
     if (!foundUser) {
@@ -28,6 +30,7 @@ const LoginForm: React.FC = () => {
     }
 
     localStorage.setItem('ecom_admin_session', JSON.stringify({ email: foundUser.email }))
+    dispatch({ type: 'ADMIN_LOGIN', payload: foundUser.email })
     setMessage('Login successful. Redirecting to home page...')
 
     window.setTimeout(() => {

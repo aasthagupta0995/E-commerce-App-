@@ -2,12 +2,7 @@ import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { login } from '../../../Slice/UserSlice'
-
-type AdminUser = {
-  name: string
-  email: string
-  password: string
-}
+import { verifyAdminUser } from './authStorage'
 
 const LoginForm: React.FC = () => {
   const [email, setEmail] = React.useState('')
@@ -17,16 +12,12 @@ const LoginForm: React.FC = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  const handleLogin = (event: React.FormEvent) => {
+  const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault()
     setError('')
     setMessage('')
 
-    const users = JSON.parse(localStorage.getItem('ecom_admin_users') ?? '[]') as AdminUser[]
-
-    const foundUser = users.find(
-      (user) => user.email.toLowerCase() === email.trim().toLowerCase() && user.password === password,
-    )
+    const foundUser = await verifyAdminUser(email, password)
 
     if (!foundUser) {
       setError('Invalid email or password. Please try again.')

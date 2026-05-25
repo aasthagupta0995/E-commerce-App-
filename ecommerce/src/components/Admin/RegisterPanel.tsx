@@ -1,11 +1,6 @@
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-
-type AdminUser = {
-  name: string
-  email: string
-  password: string
-}
+import { createAdminUser } from './authStorage'
 
 const RegisterPanel: React.FC = () => {
   const [name, setName] = React.useState('')
@@ -16,7 +11,7 @@ const RegisterPanel: React.FC = () => {
   const [message, setMessage] = React.useState('')
   const navigate = useNavigate()
 
-  const handleRegister = (event: React.FormEvent) => {
+  const handleRegister = async (event: React.FormEvent) => {
     event.preventDefault()
     setError('')
     setMessage('')
@@ -31,16 +26,13 @@ const RegisterPanel: React.FC = () => {
       return
     }
 
-    const users = JSON.parse(localStorage.getItem('ecom_admin_users') ?? '[]') as AdminUser[]
-    const exists = users.some((user) => user.email === email)
+    const result = await createAdminUser(name, email, password)
 
-    if (exists) {
-      setError('An account with this email already exists.')
+    if (result.error) {
+      setError(result.error)
       return
     }
 
-    const newUsers = [...users, { name, email, password }]
-    localStorage.setItem('ecom_admin_users', JSON.stringify(newUsers))
     setMessage('Account created successfully. Redirecting to login...')
 
     window.setTimeout(() => {

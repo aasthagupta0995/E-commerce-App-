@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { useSelector , useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
+import { login } from '../../../Slice/UserSlice'
 
 type AdminUser = {
   name: string
@@ -14,7 +15,6 @@ const LoginForm: React.FC = () => {
   const [message, setMessage] = React.useState('')
   const [error, setError] = React.useState('')
   const navigate = useNavigate()
-  const users = useSelector((state: any) => state.adminUsers) as AdminUser[]
   const dispatch = useDispatch()
 
   const handleLogin = (event: React.FormEvent) => {
@@ -22,7 +22,11 @@ const LoginForm: React.FC = () => {
     setError('')
     setMessage('')
 
-    const foundUser = users.find((user) => user.email === email && user.password === password)
+    const users = JSON.parse(localStorage.getItem('ecom_admin_users') ?? '[]') as AdminUser[]
+
+    const foundUser = users.find(
+      (user) => user.email.toLowerCase() === email.trim().toLowerCase() && user.password === password,
+    )
 
     if (!foundUser) {
       setError('Invalid email or password. Please try again.')
@@ -30,7 +34,7 @@ const LoginForm: React.FC = () => {
     }
 
     localStorage.setItem('ecom_admin_session', JSON.stringify({ email: foundUser.email }))
-    dispatch({ type: 'ADMIN_LOGIN', payload: foundUser.email })
+    dispatch(login({ name: foundUser.name, email: foundUser.email }))
     setMessage('Login successful. Redirecting to home page...')
 
     window.setTimeout(() => {

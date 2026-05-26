@@ -9,6 +9,9 @@ import store from '../store/store'
 import { Provider } from 'react-redux'
 import AuthGuard from './components/Admin/AuthGuard'
 import Dashboard from './components/Admin/Dashboard.tsx'
+import UserSignUp from './components/User/UserSignUp.tsx'
+import UserLogin from './components/User/UserLogIn.tsx'
+import UserHomePage from './components/User/UserHomePage.tsx'
 
 
 const App = () => {
@@ -19,9 +22,10 @@ const App = () => {
         <Route path="/" element={<HomePage />} />
         <Route path="/products" element={<Products />} />
         <Route path="/register" element={<RegisterPanel />} />
-        <Route element={<AuthGuard />}>
         <Route path="/admin/login" element={<AdminPanel />} />
-        </Route>
+        <Route path="/user/signUp" element={<UserSignUp/>} />
+        <Route path="/user/login" element={<UserLogin />} />
+        <Route path="/user/homepage" element={<UserHomePage />} />
         <Route element={<AuthGuard />}>
         <Route path="/admin/dashboard" element={<Dashboard />} />
         </Route>

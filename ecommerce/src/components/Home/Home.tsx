@@ -42,6 +42,9 @@ const HomePage = () => {
           <Link to="/admin/login" className="nav-cta">
             Admin Login
           </Link>
+          <Link to="/register" className="btn-secondary">
+            Logout
+          </Link>
         </nav>
       </header>
 

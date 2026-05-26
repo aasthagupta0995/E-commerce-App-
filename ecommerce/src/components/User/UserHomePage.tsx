@@ -26,6 +26,13 @@ type ApiProduct = {
   }
 }
 
+type UserSession = {
+  email?: string
+  name?: string
+  role?: string
+}
+
+
 const deliveryHints = [
   'Free delivery by tomorrow',
   'Arrives in 2 days',
@@ -66,6 +73,41 @@ const UserHomePage = () => {
   const [sortBy, setSortBy] = useState<'popular' | 'low-high' | 'high-low' | 'newest'>('popular')
   const [cart, setCart] = useState<Record<number, number>>({})
   const [slideIndex, setSlideIndex] = useState(0)
+  const [checkoutMessage, setCheckoutMessage] = useState('')
+
+  const session = useMemo<UserSession>(() => {
+    const raw = localStorage.getItem('user_session')
+    if (!raw) {
+      return {}
+    }
+
+    try {
+      return JSON.parse(raw) as UserSession
+    } catch {
+      return {}
+    }
+  }, [])
+
+  const cartStorageKey = useMemo(() => {
+    return session.email ? `user_cart_${session.email}` : 'user_cart_guest'
+  }, [session.email])
+
+  useEffect(() => {
+    const rawCart = localStorage.getItem(cartStorageKey)
+    if (!rawCart) {
+      return
+    }
+
+    try {
+      setCart(JSON.parse(rawCart) as Record<number, number>)
+    } catch {
+      localStorage.removeItem(cartStorageKey)
+    }
+  }, [cartStorageKey])
+
+  useEffect(() => {
+    localStorage.setItem(cartStorageKey, JSON.stringify(cart))
+  }, [cart, cartStorageKey])
 
   useEffect(() => {
     let isActive = true
@@ -162,16 +204,6 @@ const UserHomePage = () => {
     return Object.values(cart).reduce((sum, qty) => sum + qty, 0)
   }, [cart])
 
-  const cartTotal = useMemo(() => {
-    return Object.entries(cart).reduce((total, [id, qty]) => {
-      const product = products.find((item) => item.id === Number(id))
-      if (!product) {
-        return total
-      }
-      return total + product.price * qty
-    }, 0)
-  }, [cart, products])
-
   const cartItems = useMemo(() => {
     return Object.entries(cart)
       .map(([id, qty]) => {
@@ -179,17 +211,27 @@ const UserHomePage = () => {
         if (!product) {
           return null
         }
+
         return { product, qty }
       })
       .filter((entry): entry is { product: Product; qty: number } => entry !== null)
       .sort((a, b) => b.qty - a.qty)
   }, [cart, products])
 
+  const subtotal = useMemo(() => {
+    return cartItems.reduce((total, item) => total + item.product.price * item.qty, 0)
+  }, [cartItems])
+
+  const shipping = cartItems.length === 0 ? 0 : subtotal > 120 ? 0 : 12.5
+  const estimatedTax = subtotal * 0.08
+  const grandTotal = subtotal + shipping + estimatedTax
+
   const handleAddToCart = (id: number) => {
     setCart((prev) => ({
       ...prev,
       [id]: (prev[id] ?? 0) + 1,
     }))
+    setCheckoutMessage('')
   }
 
   const handleRemoveFromCart = (id: number) => {
@@ -208,6 +250,19 @@ const UserHomePage = () => {
     })
   }
 
+  const handleClearCart = () => {
+    setCart({})
+    setCheckoutMessage('Cart cleared.')
+  }
+
+  const handleCheckout = () => {
+    if (cartItems.length === 0) {
+      return
+    }
+
+    setCheckoutMessage('Order summary prepared. Payment integration is the next step.')
+  }
+
   const currentSlide = featuredProducts[slideIndex]
 
   const nextSlide = () => {
@@ -215,6 +270,7 @@ const UserHomePage = () => {
       if (featuredProducts.length === 0) {
         return 0
       }
+
       return (prev + 1) % featuredProducts.length
     })
   }
@@ -224,6 +280,7 @@ const UserHomePage = () => {
       if (featuredProducts.length === 0) {
         return 0
       }
+
       return (prev - 1 + featuredProducts.length) % featuredProducts.length
     })
   }
@@ -235,12 +292,28 @@ const UserHomePage = () => {
 
   return (
     <main className="user-shop-page">
+      <section className="user-shop-topbar">
+        <div>
+          <p className="eyebrow">Welcome Back</p>
+          <h2>{session.name ? `${session.name}, your store is ready.` : 'Your store is ready.'}</h2>
+          <p>Browse live products, save your cart automatically, and review your order in one place.</p>
+        </div>
+        <div className="topbar-actions">
+          <button type="button" className="topbar-secondary" onClick={handleClearCart} disabled={cartItems.length === 0}>
+            Clear Cart
+          </button>
+          <button type="button" className="cart-signout" onClick={handleSignOut}>
+            Sign Out
+          </button>
+        </div>
+      </section>
+
       <section className="user-shop-hero">
         <div className="user-shop-copy">
-          <p className="eyebrow">User Shopping Page</p>
+          <p className="eyebrow">Shopping Experience</p>
           <h1>Explore, discover, and shop with confidence</h1>
           <p>
-            Real products from a live API, curated picks, smart filtering, and a responsive cart.
+            Real products from a live API, curated essentials for backup, smart filtering, and a responsive cart.
             Everything stays smooth from browse to checkout.
           </p>
           <div className="user-shop-stats">
@@ -258,28 +331,40 @@ const UserHomePage = () => {
             </article>
           </div>
           {error ? <p className="shop-alert">{error}</p> : null}
+          {checkoutMessage ? <p className="shop-success">{checkoutMessage}</p> : null}
         </div>
         <div className="user-shop-cart-card" aria-live="polite">
-          <h2>Your Cart</h2>
+          <h2>Order Summary</h2>
           <p>{cartCount} item(s) selected</p>
-          <strong>${cartTotal.toFixed(2)}</strong>
+          <strong>${grandTotal.toFixed(2)}</strong>
           {cartItems.length > 0 ? (
             <ul className="mini-cart-list">
-              {cartItems.slice(0, 3).map(({ product, qty }) => (
+              {cartItems.slice(0, 4).map(({ product, qty }) => (
                 <li key={product.id}>
-                  <span>{product.name}</span>
-                  <span>x{qty}</span>
+                  <span>{product.name} x{qty}</span>
+                  <span>${(product.price * qty).toFixed(2)}</span>
                 </li>
               ))}
             </ul>
           ) : (
             <p className="cart-helper">Your cart is empty. Add products to continue.</p>
           )}
-          <button type="button" disabled={cartItems.length === 0}>
+          <div className="summary-lines">
+            <div>
+              <span>Subtotal</span>
+              <span>${subtotal.toFixed(2)}</span>
+            </div>
+            <div>
+              <span>Shipping</span>
+              <span>{shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`}</span>
+            </div>
+            <div>
+              <span>Tax</span>
+              <span>${estimatedTax.toFixed(2)}</span>
+            </div>
+          </div>
+          <button type="button" disabled={cartItems.length === 0} onClick={handleCheckout}>
             Proceed to Checkout
-          </button>
-          <button type="button" className="cart-signout" onClick={handleSignOut}>
-            Sign Out
           </button>
         </div>
       </section>
@@ -368,6 +453,7 @@ const UserHomePage = () => {
         ) : (
           filteredProducts.map((item) => {
             const quantity = cart[item.id] ?? 0
+
             return (
               <article key={item.id} className="user-shop-card">
                 <img src={item.image} alt={item.name} />

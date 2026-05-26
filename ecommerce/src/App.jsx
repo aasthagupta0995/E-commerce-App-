@@ -13,6 +13,7 @@ import UserLogin from './components/User/UserLogIn.tsx'
 import UserHomePage from './components/User/UserHomePage.tsx'
 import UserAuthGuard from './components/User/UserAuthGuard.tsx'
 import RoleHomeRedirect from './components/RoleHomeRedirect.tsx'
+import Customers from './components/Admin/Customers.tsx'
 
 
 const App = () => {
@@ -32,6 +33,7 @@ const App = () => {
         <Route element={<AuthGuard />}>
         <Route path="/admin/dashboard" element={<Dashboard />} />
         </Route>
+        <Route path="/admin/customers" element={<Customers />} />
         <Route path="/survey" element={<SurveyForm />} />
       </Routes>
     </Provider>

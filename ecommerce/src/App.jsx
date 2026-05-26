@@ -7,6 +7,8 @@ import Products from './components/Products/Products'
 import SurveyForm from './components/Survey/SurveyForm'
 import store from '../store/store'
 import { Provider } from 'react-redux'
+import AuthGuard from './components/Admin/AuthGuard'
+import Dashboard from './components/Admin/Dashboard.tsx'
 
 
 const App = () => {
@@ -17,7 +19,12 @@ const App = () => {
         <Route path="/" element={<HomePage />} />
         <Route path="/products" element={<Products />} />
         <Route path="/register" element={<RegisterPanel />} />
+        <Route element={<AuthGuard />}>
         <Route path="/admin/login" element={<AdminPanel />} />
+        </Route>
+        <Route element={<AuthGuard />}>
+        <Route path="/admin/dashboard" element={<Dashboard />} />
+        </Route>
         <Route path="/survey" element={<SurveyForm />} />
       </Routes>
     </Provider>

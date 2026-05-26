@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 type Product = {
   id: number
@@ -24,141 +25,6 @@ type ApiProduct = {
     count: number
   }
 }
-
-const fallbackProducts: Product[] = [
-  {
-    id: 1,
-    name: 'Noise-Canceling Headphones',
-    category: 'Electronics',
-    price: 129.99,
-    rating: 4.7,
-    reviews: 132,
-    delivery: 'Free delivery by tomorrow',
-    image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1000&q=80',
-    description: 'Immersive over-ear headphones with all-day comfort and crystal-clear calls.',
-  },
-  {
-    id: 2,
-    name: 'Smart Fitness Watch',
-    category: 'Electronics',
-    price: 89.5,
-    rating: 4.4,
-    reviews: 88,
-    delivery: 'Arrives in 2 days',
-    image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1000&q=80',
-    description: 'Track heart rate, workouts, and sleep with smart reminders and GPS support.',
-  },
-  {
-    id: 3,
-    name: 'Minimal Linen Shirt',
-    category: 'Fashion',
-    price: 34.0,
-    rating: 4.5,
-    reviews: 64,
-    delivery: 'Free delivery on orders above $40',
-    image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=1000&q=80',
-    description: 'Breathable premium linen shirt with a clean modern silhouette.',
-  },
-  {
-    id: 4,
-    name: 'Ceramic Dinner Set',
-    category: 'Home',
-    price: 56.75,
-    rating: 4.6,
-    reviews: 71,
-    delivery: 'Arrives in 3 days',
-    image: 'https://images.unsplash.com/photo-1603190287605-e6ade32fa852?auto=format&fit=crop&w=1000&q=80',
-    description: '12-piece handcrafted ceramic dinnerware set for everyday elegance.',
-  },
-  {
-    id: 5,
-    name: 'Hydrating Skin Kit',
-    category: 'Beauty',
-    price: 42.25,
-    rating: 4.8,
-    reviews: 109,
-    delivery: 'Same day delivery available',
-    image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=1000&q=80',
-    description: 'A complete hydration routine for soft, healthy, and glowing skin.',
-  },
-  {
-    id: 6,
-    name: 'Air Purifier Pro',
-    category: 'Home',
-    price: 139.0,
-    rating: 4.3,
-    reviews: 53,
-    delivery: 'Free delivery by Friday',
-    image: 'https://images.unsplash.com/photo-1585771724684-38269d6639fd?auto=format&fit=crop&w=1000&q=80',
-    description: 'HEPA-grade filtration with whisper-quiet operation for cleaner indoor air.',
-  },
-  {
-    id: 7,
-    name: 'Classic Sneaker',
-    category: 'Fashion',
-    price: 64.0,
-    rating: 4.4,
-    reviews: 95,
-    delivery: 'Arrives in 2 days',
-    image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=1000&q=80',
-    description: 'Timeless daily-wear sneaker designed for comfort and street style.',
-  },
-  {
-    id: 8,
-    name: 'Vitamin C Face Serum',
-    category: 'Beauty',
-    price: 22.99,
-    rating: 4.7,
-    reviews: 126,
-    delivery: 'Free delivery by tomorrow',
-    image: 'https://images.unsplash.com/photo-1571781926291-c477ebfd024b?auto=format&fit=crop&w=1000&q=80',
-    description: 'Brightening antioxidant serum to even skin tone and boost radiance.',
-  },
-  {
-    id: 9,
-    name: 'Portable Blender',
-    category: 'Home',
-    price: 39.99,
-    rating: 4.3,
-    reviews: 76,
-    delivery: 'Arrives in 1-2 days',
-    image: 'https://images.unsplash.com/photo-1578314675249-a6910f80cc4e?auto=format&fit=crop&w=1000&q=80',
-    description: 'USB-rechargeable blender perfect for smoothies at home or on the go.',
-  },
-  {
-    id: 10,
-    name: 'Wireless Gaming Mouse',
-    category: 'Electronics',
-    price: 49.95,
-    rating: 4.5,
-    reviews: 114,
-    delivery: 'Free delivery by tomorrow',
-    image: 'https://images.unsplash.com/photo-1527814050087-3793815479db?auto=format&fit=crop&w=1000&q=80',
-    description: 'Ultra-responsive ergonomic mouse with customizable DPI and RGB lighting.',
-  },
-  {
-    id: 11,
-    name: 'Leather Crossbody Bag',
-    category: 'Fashion',
-    price: 58.5,
-    rating: 4.6,
-    reviews: 84,
-    delivery: 'Arrives in 2 days',
-    image: 'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?auto=format&fit=crop&w=1000&q=80',
-    description: 'Compact premium leather bag with multiple pockets and adjustable strap.',
-  },
-  {
-    id: 12,
-    name: 'Aloe Gel Moisturizer',
-    category: 'Beauty',
-    price: 18.75,
-    rating: 4.4,
-    reviews: 61,
-    delivery: 'Same day delivery available',
-    image: 'https://images.unsplash.com/photo-1526947425960-945c6e72858f?auto=format&fit=crop&w=1000&q=80',
-    description: 'Lightweight soothing moisturizer that hydrates without leaving residue.',
-  },
-]
 
 const deliveryHints = [
   'Free delivery by tomorrow',
@@ -191,7 +57,8 @@ const mapApiProducts = (items: ApiProduct[]): Product[] => {
 }
 
 const UserHomePage = () => {
-  const [products, setProducts] = useState<Product[]>(fallbackProducts)
+  const navigate = useNavigate()
+  const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [search, setSearch] = useState('')
@@ -217,14 +84,14 @@ const UserHomePage = () => {
         }
 
         const transformed = mapApiProducts(data)
-        const merged = [...fallbackProducts, ...transformed]
+        const merged = [ ...transformed]
         setProducts(merged)
         setError('')
       } catch {
         if (!isActive) {
           return
         }
-        setProducts(fallbackProducts)
+        setProducts([])
         setError('Live products are unavailable right now. Showing curated collection.')
       } finally {
         if (isActive) {
@@ -361,6 +228,11 @@ const UserHomePage = () => {
     })
   }
 
+  const handleSignOut = () => {
+    localStorage.removeItem('user_session')
+    navigate('/user/login')
+  }
+
   return (
     <main className="user-shop-page">
       <section className="user-shop-hero">
@@ -405,6 +277,9 @@ const UserHomePage = () => {
           )}
           <button type="button" disabled={cartItems.length === 0}>
             Proceed to Checkout
+          </button>
+          <button type="button" className="cart-signout" onClick={handleSignOut}>
+            Sign Out
           </button>
         </div>
       </section>

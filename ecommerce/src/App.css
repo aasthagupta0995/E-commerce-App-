@@ -478,6 +478,13 @@
   cursor: not-allowed;
 }
 
+.user-shop-cart-card .cart-signout {
+  margin-top: 0;
+  background: transparent;
+  border: 1px solid rgba(148, 163, 184, 0.6);
+  color: #cbd5e1;
+}
+
 .user-shop-slider {
   display: grid;
   grid-template-columns: 1.2fr 1fr;

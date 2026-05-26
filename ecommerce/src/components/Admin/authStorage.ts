@@ -55,7 +55,7 @@ export const createAdminUser = async (name: string, email: string, password: str
   }
 
   const passwordHash = await bcrypt.hash(password, 10)
-  const newUser = { name: name.trim(), email: normalizedEmail, passwordHash }
+  const newUser = { name: name.trim(), email: normalizedEmail, passwordHash , role: 'admin'}
 
   saveAdminUsers([...users, newUser])
 
@@ -71,7 +71,7 @@ export const createUser = async (name: string, email: string, password: string) 
   }
 
   const passwordHash = await bcrypt.hash(password, 10)
-  const newUser = { name: name.trim(), email: normalizedEmail, passwordHash }
+  const newUser = { name: name.trim(), email: normalizedEmail, passwordHash ,role: 'user'}
 
   saveUsers([...users, newUser])
 

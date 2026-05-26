@@ -24,12 +24,15 @@ const UserLogin: React.FC = () => {
       return
     }
 
-    localStorage.setItem('user_session', JSON.stringify({ email: foundUser.email }))
+    localStorage.setItem(
+      'user_session',
+      JSON.stringify({ email: foundUser.email, name: foundUser.name, role: 'user' }),
+    )
     dispatch(login({ name: foundUser.name, email: foundUser.email }))
-    setMessage('Login successful. Redirecting to home page...')
+    setMessage('Login successful. Redirecting to your shopping page...')
 
     window.setTimeout(() => {
-      navigate('/')
+      navigate('/user/homepage')
     }, 700)
   }
 

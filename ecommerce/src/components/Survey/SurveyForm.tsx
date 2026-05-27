@@ -1,7 +1,6 @@
 import * as yup from 'yup'
 import { useFormik } from 'formik'
 import { useState } from 'react'
-import { clear } from 'node:console'
 
 const schema = yup.object().shape({
     name: yup.string().required('Name is required'),

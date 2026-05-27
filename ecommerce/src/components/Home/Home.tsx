@@ -33,7 +33,7 @@ const HomePage = () => {
       <header className="site-header">
         <div className="brand-block">
           <span className="brand-badge">NovaCart</span>
-          <p className="brand-tagline">Modern commerce for modern brands</p>
+          <p className="brand-tagline">Commerce platform for ambitious digital brands</p>
         </div>
         <nav className="site-nav">
           <a href="#features">Features</a>
@@ -52,14 +52,14 @@ const HomePage = () => {
         <section className="hero-section">
           <div>
             <p className="eyebrow">Next Gen E-Commerce Starter</p>
-            <h1>Launch a premium shopping experience without the chaos.</h1>
+            <h1>Build a polished storefront your customers trust from day one.</h1>
             <p className="hero-copy">
-              Built to scale, fast to customize, and easy to manage. Start with a clean frontend and expand
-              into full cart, checkout, payments, and analytics.
+              Ship faster with a clean architecture, admin tooling, and responsive shopping flow.
+              Ready for product APIs, checkout, payments, and analytics as your store scales.
             </p>
             <div className="hero-actions">
               <a href="#products" className="btn-primary">
-                Explore Products
+                Browse Collection
               </a>
               <Link to="/register" className="btn-secondary">
                 Create Admin Account
@@ -67,7 +67,7 @@ const HomePage = () => {
             </div>
           </div>
           <div className="hero-highlight">
-            <h2>Store Pulse</h2>
+            <h2>Business Snapshot</h2>
             <ul>
               <li>
                 <span>Conversion Lift</span>
@@ -87,23 +87,23 @@ const HomePage = () => {
 
         <section id="features" className="feature-grid">
           <article>
-            <h3>Fast UI Foundation</h3>
-            <p>Performance-focused components to keep interactions smooth across desktop and mobile.</p>
+            <h3>Performance First</h3>
+            <p>Optimized interface patterns keep browsing and interactions smooth on every device.</p>
           </article>
           <article>
-            <h3>Admin Ready</h3>
-            <p>Secure login and registration flow ready for API integration and role-based access.</p>
+            <h3>Operations Ready</h3>
+            <p>Structured admin workflows make it easier to manage products, users, and content changes.</p>
           </article>
           <article>
-            <h3>Scalable Structure</h3>
-            <p>Simple folder setup today, easy to split into pages, services, and state modules tomorrow.</p>
+            <h3>Scalable Foundation</h3>
+            <p>Modular project setup supports future expansion into services, APIs, and advanced analytics.</p>
           </article>
         </section>
 
         <section id="products" className="products-panel">
           <div className="section-header">
             <p className="eyebrow">Featured Collection</p>
-            <h2>Top picks your customers will love</h2>
+            <h2>Best sellers your audience will love</h2>
           </div>
           <div className="products-grid">
             {featuredProducts.map((item) => (
@@ -113,7 +113,7 @@ const HomePage = () => {
                 <p className="product-meta">Rating {item.rating}</p>
                 <div className="product-footer">
                   <strong>{item.price}</strong>
-                  <button type="button">Add to Cart</button>
+                  <button type="button">Quick Add</button>
                 </div>
               </article>
             ))}
@@ -122,15 +122,15 @@ const HomePage = () => {
 
         <section id="faq" className="faq-panel">
           <div>
-            <h2>What is ready now?</h2>
+            <h2>What is included today?</h2>
             <p>
-              You now have a production-style landing page, responsive layout, and working admin auth screens
-              with local storage based user records.
+              Production-ready homepage, responsive layout, user journeys, and admin authentication flows
+              with local storage session support.
             </p>
           </div>
           <div>
-            <h2>What is next?</h2>
-            <p>Add product APIs, cart state management, checkout flow, and backend authentication tokens.</p>
+            <h2>Recommended next step</h2>
+            <p>Integrate backend APIs for products, checkout, payment processing, and token-based security.</p>
           </div>
         </section>
       </main>

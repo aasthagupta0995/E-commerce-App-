@@ -1,5 +1,5 @@
 import React from 'react'
-import axios from 'axios'
+import { httpRequest } from '../../lib/http-request'
 
 type Customer = {
     id: number
@@ -21,12 +21,12 @@ const Customers = () => {
     React.useEffect(() => {
         const fetchCustomers = async () => {
             try {
-                const response = await axios.get('/api/customers')
-                                setCustomers(response.data as Customer[])
+                const data = await httpRequest.get('/api/customers')
+                setCustomers(data as Customer[])
             }
             catch (error) {
                 console.error('Error fetching customers:', error)
-                                setCustomers(fallbackCustomers)
+                setCustomers(fallbackCustomers)
             }
         }
 

@@ -24,7 +24,8 @@ const LoginForm: React.FC = () => {
       return
     }
 
-    localStorage.setItem('ecom_admin_session', JSON.stringify({ email: foundUser.email }))
+    const token = btoa(`${foundUser.email}:${Date.now()}`)
+    localStorage.setItem('ecom_admin_session', JSON.stringify({ email: foundUser.email, token }))
     dispatch(login({ name: foundUser.name, email: foundUser.email }))
     setMessage('Login successful. Redirecting to home page...')
 

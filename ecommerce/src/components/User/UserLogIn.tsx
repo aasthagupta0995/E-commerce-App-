@@ -24,9 +24,11 @@ const UserLogin: React.FC = () => {
       return
     }
 
+    const token = btoa(`${foundUser.email}:${Date.now()}`)
+
     localStorage.setItem(
       'user_session',
-      JSON.stringify({ email: foundUser.email, name: foundUser.name, role: 'user' }),
+      JSON.stringify({ email: foundUser.email, name: foundUser.name, role: 'user', token }),
     )
     dispatch(login({ name: foundUser.name, email: foundUser.email }))
     setMessage('Login successful. Redirecting to your shopping page...')

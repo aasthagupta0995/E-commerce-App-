@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { httpRequest } from '../../lib/http-request'
 
 type Product = {
   id: number
@@ -115,12 +116,7 @@ const UserHomePage = () => {
     const loadProducts = async () => {
       try {
         setLoading(true)
-        const response = await fetch('https://fakestoreapi.com/products')
-        if (!response.ok) {
-          throw new Error('Unable to fetch products')
-        }
-
-        const data = (await response.json()) as ApiProduct[]
+        const data = (await httpRequest.get('https://fakestoreapi.com/products')) as ApiProduct[]
         if (!isActive) {
           return
         }

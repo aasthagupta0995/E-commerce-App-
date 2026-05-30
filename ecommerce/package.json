@@ -21,6 +21,7 @@
     "react-dom": "^19.2.6",
     "react-redux": "^9.3.0",
     "react-router-dom": "^7.15.1",
+    "swr": "^2.4.1",
     "yup": "^1.7.1"
   },
   "devDependencies": {

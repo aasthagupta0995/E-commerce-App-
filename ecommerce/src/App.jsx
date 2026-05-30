@@ -15,6 +15,7 @@ import UserAuthGuard from './components/User/UserAuthGuard.tsx'
 import RoleHomeRedirect from './components/RoleHomeRedirect.tsx'
 import Customers from './components/Admin/Customers.tsx'
 import AdminProducts from './components/Admin/AdminProducts.tsx'
+import Profile from './components/User/Profile.tsx'
 
 
 const App = () => {
@@ -29,6 +30,7 @@ const App = () => {
         <Route path="/user/signUp" element={<UserSignUp/>} />
         <Route path="/user/login" element={<UserLogin />} />
         <Route path="/admin/products" element={<AdminProducts />} />
+        <Route path="/user/profile" element={<Profile />} />
         <Route element={<UserAuthGuard />}>
         <Route path="/user/homepage" element={<UserHomePage />} />
         </Route>

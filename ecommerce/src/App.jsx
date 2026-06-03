@@ -16,31 +16,38 @@ import RoleHomeRedirect from './components/RoleHomeRedirect.tsx'
 import Customers from './components/Admin/Customers.tsx'
 import AdminProducts from './components/Admin/AdminProducts.tsx'
 import Profile from './components/User/Profile.tsx'
+import SuccessPayment from './components/Payment stripe/SuccessPayment.tsx'
+import FailurePayment from './components/Payment stripe/FailurePayment.tsx'
+import StripeUI from './components/Payment stripe/StripeUI.jsx'
+
 
 
 const App = () => {
   return (
     <BrowserRouter>
-    <Provider store={store}>
-      <Routes>
-        <Route path="/" element={<RoleHomeRedirect />} />
-        <Route path="/products" element={<Products />} />
-        <Route path="/register" element={<RegisterPanel />} />
-        <Route path="/admin/login" element={<AdminPanel />} />
-        <Route path="/user/signUp" element={<UserSignUp/>} />
-        <Route path="/user/login" element={<UserLogin />} />
-        <Route path="/admin/products" element={<AdminProducts />} />
-        <Route path="/user/profile" element={<Profile />} />
-        <Route element={<UserAuthGuard />}>
-        <Route path="/user/homepage" element={<UserHomePage />} />
-        </Route>
-        <Route element={<AuthGuard />}>
-        <Route path="/admin/dashboard" element={<Dashboard />} />
-        </Route>
-        <Route path="/admin/customers" element={<Customers />} />
-        <Route path="/survey" element={<SurveyForm />} />
-      </Routes>
-    </Provider>
+      <Provider store={store}>
+        <Routes>
+          <Route path="/" element={<RoleHomeRedirect />} />
+          <Route path="/products" element={<Products />} />
+          <Route path="/register" element={<RegisterPanel />} />
+          <Route path="/admin/login" element={<AdminPanel />} />
+          <Route path="/user/signUp" element={<UserSignUp />} />
+          <Route path="/user/login" element={<UserLogin />} />
+          <Route path="/admin/products" element={<AdminProducts />} />
+          <Route path='/user/payment' element={<StripeUI />} />
+          <Route path="/user/payment/success" element={<SuccessPayment />} />
+          <Route path="/user/payment/fail" element={<FailurePayment />} />
+          <Route path="/user/profile" element={<Profile />} />
+          <Route element={<UserAuthGuard />}>
+            <Route path="/user/homepage" element={<UserHomePage />} />
+          </Route>
+          <Route element={<AuthGuard />}>
+            <Route path="/admin/dashboard" element={<Dashboard />} />
+          </Route>
+          <Route path="/admin/customers" element={<Customers />} />
+          <Route path="/survey" element={<SurveyForm />} />
+        </Routes>
+      </Provider>
     </BrowserRouter>
   )
 }
